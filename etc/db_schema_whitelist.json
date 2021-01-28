@@ -1,0 +1,16 @@
+{
+    "magento360_custom_name": {
+        "column": {
+            "entity_id": true,
+            "customer_id": true,
+            "product_id": true,
+            "value": true,
+            "item_limit_remained": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "MAGENTO360_CUSTOM_NAME_PRD_ID_CAT_PRD_ENTT_ENTT_ID": true,
+            "MAGENTO360_CUSTOM_NAME_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true
+        }
+    }
+}

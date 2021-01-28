@@ -1,0 +1,22 @@
+{
+    "name": "magento360/module-customename",
+    "description": "",
+    "type": "magento2-module",
+    "license": "OSL-3.0",
+    "authors": [
+        {
+            "email": "info@mage2gen.com",
+            "name": "Mage2Gen"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Magento360\\CustomeName\\": ""
+        },
+        "files": [
+            "registration.php"
+        ]
+    }
+}
