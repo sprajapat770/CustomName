@@ -31,6 +31,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     private $registry;
 
+
     public function __construct(
         Context $context,
         SessionFactory $sessionFactory,

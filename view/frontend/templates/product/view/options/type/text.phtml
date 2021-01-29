@@ -41,7 +41,7 @@ $customerHelper = $this->helper('Magento360\CustomeName\Helper\Data');
                     <?php } ?>
                        name="options[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                        data-selector="options[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
-                       value="2222 <?= $block->escapeHtml($customerHelper->getSingleCustomNameValue()) ?>"/>
+                       value="<?= $block->escapeHtml($customerHelper->getSingleCustomNameValue()) ?>"/>
             <?php elseif ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_AREA) :?>
                 <?php $_textAreaValidate = null;
                 if ($_option->getIsRequire()) {
@@ -84,7 +84,7 @@ $customerHelper = $this->helper('Magento360\CustomeName\Helper\Data');
         <?php endif; ?>
     </div>
 
-<?php else:?>
+<?php elseif($_option->getTitle() != "Purchaged Name"):?>
     <div class="field<?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_AREA) {
         echo ' textarea';
     } ?><?= /* @noEscape */ $class ?>">

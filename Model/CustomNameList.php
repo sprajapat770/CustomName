@@ -3,7 +3,10 @@
 
 namespace Magento360\CustomeName\Model;
 
+use Magento\Backend\Model\Session;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Block\Adminhtml\Edit\Tab\View\PersonalInfo;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Module\Manager as ModuleManager;
 
 /**
@@ -28,14 +31,14 @@ class CustomNameList extends \Magento\Eav\Model\Entity\Attribute\Source\Abstract
     private $personalInfo;
 
     /**
-     * @var \Magento\Backend\Model\Session
+     * @var Session
      */
     protected $_backendSession;
 
     /**
      * Customer data factory
      *
-     * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
+     * @var CustomerInterfaceFactory
      */
     protected $customerDataFactory;
 
@@ -46,25 +49,24 @@ class CustomNameList extends \Magento\Eav\Model\Entity\Attribute\Source\Abstract
      */
     protected $customer;
 
-
     /**
      * Data object helper
      *
-     * @var \Magento\Framework\Api\DataObjectHelper
+     * @var DataObjectHelper
      */
     protected $dataObjectHelper;
+
     /**
-     * @var \Magento\Backend\Model\Session
+     * @var Session
      */
     private $backendSession;
-
 
     public function __construct(
         ModuleManager $moduleManager,
         CustomName $list,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerDataFactory,
-        \Magento\Backend\Model\Session $backendSession,
+        DataObjectHelper $dataObjectHelper,
+        CustomerInterfaceFactory $customerDataFactory,
+        Session $backendSession,
         PersonalInfo $personalInfo
     ) {
         $this->_list = $list;
@@ -101,6 +103,7 @@ class CustomNameList extends \Magento\Eav\Model\Entity\Attribute\Source\Abstract
     /**
      * Get model option as array
      *
+     * @param bool $withEmpty
      * @return array
      */
     public function getAllOptions($withEmpty = true)
@@ -117,6 +120,9 @@ class CustomNameList extends \Magento\Eav\Model\Entity\Attribute\Source\Abstract
         return $options;
     }
 
+    /**
+     * @return \Magento\Customer\Api\Data\CustomerInterface
+     */
     public function getCustomer()
     {
         if (!$this->customer) {
