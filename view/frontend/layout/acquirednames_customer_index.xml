@@ -1,0 +1,14 @@
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd"> 
+	<update handle="customer_account"/> 
+	<body> 
+		<referenceBlock name="page.main.title"> 
+			<action method="setPageTitle"> 
+				<argument translate="true" name="title" xsi:type="string">My Custom Tab</argument> 
+			</action> 
+			</referenceBlock> 
+			<referenceContainer name="content"> 
+				<block class="Magento\Framework\View\Element\Template" name="my_tab" template="Magento360_CustomeName::acquired-names.phtml"> 
+			</block> 
+		</referenceContainer> 
+	</body> 
+</page>

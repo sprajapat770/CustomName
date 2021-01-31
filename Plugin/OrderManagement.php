@@ -48,7 +48,7 @@ class OrderManagement
                 $options = $item->getProductOptions();
                 if (isset($options['options']) && !empty($options['options'])) {
                     foreach ($options['options'] as $option) {
-                        $data = $this->customNameRepository->getValuesByCustomerId($customer_id);
+                        //$data = $this->customNameRepository->getValuesByCustomerId($customer_id);
                         if ($option['label'] == "Purchaged Name" ){
                             $this->customNameinterface->setCustomerId($customer_id);
                             $this->customNameinterface->setProductId($item->getProductId());

@@ -7,7 +7,7 @@ use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento360\CustomeName\Api\Data\CustomNameInterface;
-use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SearchResultsInterface;
 use Magento360\CustomeName\Model\ResourceModel\CustomName\CollectionFactory;
 use Magento360\CustomeName\Model\ResourceModel\CustomName as ObjectResourceModel;
 
@@ -35,7 +35,7 @@ class CustomNameRepository implements \Magento360\CustomeName\Api\CustomNameRepo
         CustomNameFactory $objectFactory,
         ObjectResourceModel $objectResourceModel,
         CollectionFactory $collectionFactory,
-        SearchCriteriaInterface $searchResultsFactory
+        SearchResultsInterface $searchResultsFactory
     ) {
         $this->objectFactory        = $objectFactory;
         $this->objectResourceModel  = $objectResourceModel;
