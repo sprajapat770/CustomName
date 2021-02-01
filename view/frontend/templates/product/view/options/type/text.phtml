@@ -22,7 +22,7 @@ $customerHelper = $this->helper('Magento360\CustomeName\Helper\Data');
             <?= /* @noEscape */ $block->getFormattedPrice() ?>
         </label>
 
-        <div class="control">
+        <div class="control" data-bind="scope:'suraj-component'">
             <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_FIELD) :?>
                 <?php $_textValidate = null;
                 if ($_option->getIsRequire()) {
@@ -33,7 +33,7 @@ $customerHelper = $this->helper('Magento360\CustomeName\Helper\Data');
                 }
                 $_textValidate['validate-no-utf8mb4-characters'] = true;
                 ?>
-                <input type="text"
+                <input data-bind="value:getLastItems()" type="text"
                        id="options_<?= $block->escapeHtmlAttr($_option->getId()) ?>_text"
                        class="input-text product-custom-option"
                     <?php if (!empty($_textValidate)) {?>
@@ -41,7 +41,7 @@ $customerHelper = $this->helper('Magento360\CustomeName\Helper\Data');
                     <?php } ?>
                        name="options[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                        data-selector="options[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
-                       value="<?= $block->escapeHtml($customerHelper->getSingleCustomNameValue()) ?>"/>
+                       value=""/>
             <?php elseif ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_AREA) :?>
                 <?php $_textAreaValidate = null;
                 if ($_option->getIsRequire()) {
@@ -82,6 +82,19 @@ $customerHelper = $this->helper('Magento360\CustomeName\Helper\Data');
         }
     </script>
         <?php endif; ?>
+        <script type="text/x-magento-init">
+    {
+        "*":{
+            "Magento_Ui/js/core/app":{
+                "components":{
+                    "suraj-component":{
+                        "component":"Magento360_CustomeName/js/custom-name"
+                    }
+                }
+            }
+        }
+    }
+</script>
     </div>
 
 <?php elseif($_option->getTitle() != "Purchaged Name"):?>

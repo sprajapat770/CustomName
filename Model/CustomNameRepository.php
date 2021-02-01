@@ -2,6 +2,7 @@
 
 
 namespace Magento360\CustomeName\Model;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento360\CustomeName\Model\CustomNameFactory;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -81,7 +82,7 @@ class CustomNameRepository implements \Magento360\CustomeName\Api\CustomNameRepo
      */
     public function getList(SearchCriteriaInterface $criteria)
     {
-        $searchResults = $this->searchResultsFactory->create();
+        $searchResults = $this->searchResultsFactory;
         $searchResults->setSearchCriteria($criteria);
         $collection = $this->collectionFactory->create();
         foreach ($criteria->getFilterGroups() as $filterGroup) {
@@ -135,7 +136,7 @@ class CustomNameRepository implements \Magento360\CustomeName\Api\CustomNameRepo
     /**
      * @param $id
      * @return mixed
-     * @throws NoSuchEntityException
+     * @throws NoSuchEntityException|CouldNotDeleteException
      */
     public function deleteById($id)
     {

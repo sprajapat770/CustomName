@@ -7,6 +7,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento360\CustomeName\Api\CustomNameRepositoryInterface;
 use Magento360\CustomeName\Api\Data\CustomNameInterface;
+use Magento\Customer\Model\SessionFactory;
 
 class OrderManagement
 {
@@ -14,14 +15,20 @@ class OrderManagement
     private $customNameinterface;
 
     private $customNameRepository;
+    /**
+     * @var SessionFactory
+     */
+    private $sessionFactory;
 
     public function __construct(
         CustomNameInterface $customName,
-        CustomNameRepositoryInterface $customNameRepository
+        CustomNameRepositoryInterface $customNameRepository,
+        SessionFactory $sessionFactory
     ) {
 
         $this->customNameinterface = $customName;
         $this->customNameRepository = $customNameRepository;
+        $this->sessionFactory = $sessionFactory;
     }
 
     /**
@@ -43,13 +50,13 @@ class OrderManagement
     ): OrderInterface {
         $order = $proceed($order);
         $items = $order->getItems();
-        if (!empty($customer_id = $order->getCustomerId())){
-            foreach ($items as $item){
+        if (!empty($customer_id = $order->getCustomerId())) {
+            foreach ($items as $item) {
                 $options = $item->getProductOptions();
                 if (isset($options['options']) && !empty($options['options'])) {
                     foreach ($options['options'] as $option) {
-                        //$data = $this->customNameRepository->getValuesByCustomerId($customer_id);
-                        if ($option['label'] == "Purchaged Name" ){
+                        $data = $this->customNameRepository->getValuesByCustomerId($customer_id);
+                        if ($option['label'] == "Purchaged Name") {
                             $this->customNameinterface->setCustomerId($customer_id);
                             $this->customNameinterface->setProductId($item->getProductId());
                             $this->customNameinterface->setValue($option['option_value']);

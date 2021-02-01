@@ -4,8 +4,10 @@ namespace Magento360\CustomeName\Helper;
 
 use Magento\Customer\Model\SessionFactory;
 use Magento\Customer\Model\Session;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Registry;
+use Magento360\CustomeName\Api\CustomNameRepositoryInterface;
 use Magento360\CustomeName\Model\CustomNameFactory;
 
 /**
@@ -32,19 +34,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     private $registry;
 
     protected $custom;
-    
+
     protected $searchCriteriaBuilder;
 
     protected $_list;
-    
+
     public function __construct(
         Context $context,
         SessionFactory $sessionFactory,
         CustomNameFactory $customName,
         Registry $registry,
         Session $session,
-        \Magento360\CustomeName\Api\CustomNameRepositoryInterface $list,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+        CustomNameRepositoryInterface $list,
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         parent::__construct($context);
         $this->sessionFactory = $sessionFactory;
@@ -54,45 +56,47 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_list = $list;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
        // $this->custom = $custom;
-
     }
 
+    /**
+     * @return mixed
+     */
     public function getCustomer()
     {
         return $this->sessionFactory->create()->getCustomer();
     }
-    public function getSingleCustomNameValue(){
 
-        $searchCriteria = $this->searchCriteriaBuilder->addFilter('customer_id',1,'eq')->create();
-        
-        $items = $this->_list->getList($searchCriteria);
-        
-        $value = [];
-        
-        foreach ($items as $key => $val) {
-            $value[] = $val->getValue();
-        }
-        var_dump($value);
-        exit();
-        if ($this->sessionFactory->create()->isLoggedIn()){
-            //$d = $this->custom->getSectionData();
-
-            $tablecollection = $this->customName->create()->getCollection()
-                ->addFieldToFilter('customer_id',$this->getCustomer()->getId())
-                ->addFieldToFilter('product_id',$this->getCurrentProduct()->getId())
-                ->addFieldToSelect('value')
-                ->setOrder('entity_id')
-                ->setCurPage(1)
-                ->setPageSize(1);
-            $value = '';
-
-            foreach ($tablecollection as $data){
-               $value =  $data->getValue();
-            }
-            return $value;
-        }
-        return '';
-    }
+//    public function getSingleCustomNameValue(){
+//
+//        $searchCriteria = $this->searchCriteriaBuilder->addFilter('customer_id',1,'eq')->create();
+//
+//        $items = $this->_list->getList($searchCriteria);
+//
+//        $value = '';
+//
+//        foreach ($items->getItems() as $key => $val) {
+//            $value = $val->getValue();
+//        }
+//        return $value;
+////        if ($this->sessionFactory->create()->isLoggedIn()){
+////            //$d = $this->custom->getSectionData();
+////
+////            $tablecollection = $this->customName->create()->getCollection()
+////                ->addFieldToFilter('customer_id',$this->getCustomer()->getId())
+////                ->addFieldToFilter('product_id',$this->getCurrentProduct()->getId())
+////                ->addFieldToSelect('value')
+////                ->setOrder('entity_id')
+////                ->setCurPage(1)
+////                ->setPageSize(1);
+////            $value = '';
+////
+////            foreach ($tablecollection as $data){
+////               $value =  $data->getValue();
+////            }
+////            return $value;
+////        }
+////        return '';
+//    }
 
 
     public function getCurrentProduct()

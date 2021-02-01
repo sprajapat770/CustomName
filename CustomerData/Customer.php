@@ -18,7 +18,7 @@ class Customer implements SectionSourceInterface
     protected $searchCriteriaBuilder;
 
     protected $_list;
-  
+
     public function __construct(
         CurrentCustomer $currentCustomer,
         \Magento360\CustomeName\Api\CustomNameRepositoryInterface $list,
@@ -39,18 +39,17 @@ class Customer implements SectionSourceInterface
             return [];
         }
 
-        $customerId = $this->currentCustomer->getCustomerId();
-        
-        $searchCriteria = $this->searchCriteriaBuilder->addFilter('customer_id',$customerId,'eq')->create();
-        
-        $items = $this->_list->getList($searchCriteria);
-        
         $value = [];
-        
-        foreach ($items as $key => $val) {
+        $customerId = $this->currentCustomer->getCustomerId();
+
+        $searchCriteria = $this->searchCriteriaBuilder->addFilter('customer_id',$customerId,'eq')->create();
+
+        $items = $this->_list->getList($searchCriteria);
+
+        foreach ($items->getItems() as $key => $val) {
             $value[] = $val->getValue();
         }
-     
-        return $value;
+
+        return ["values"=>$value];
     }
 }

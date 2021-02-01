@@ -21,9 +21,9 @@
         </constraint>
         <constraint xsi:type="foreign" referenceId="MAGENTO_CUSTOM_NAME_ENTITY_ID_CATALOG_PRODUCT_ENTITY_CUSTOMER_ID"
                     table="catalog_product_entity_text" column="product_id" referenceTable="catalog_product_entity"
-                    referenceColumn="entity_id" onDelete="CASCADE"/>
+                    referenceColumn="entity_id" onDelete="SET NULL"/>
         <constraint xsi:type="foreign" referenceId="MAGENTO_CUSTOM_NAME_ENTITY_ID_CUSTOMER_ENTITY_CUSTOMER_ID"
                     table="customer_address_entity" column="customer_id" referenceTable="customer_entity"
-                    referenceColumn="entity_id" onDelete="CASCADE"/>
+                    referenceColumn="entity_id" onDelete="SET NULL"/>
     </table>
 </schema>
