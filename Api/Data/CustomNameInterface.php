@@ -52,4 +52,15 @@ interface CustomNameInterface
      * @return mixed
      */
     public function setValue($value);
+
+    /**
+     * @return mixed
+     */
+    public function getQty();
+
+    /**
+     * @param $qty
+     * @return mixed
+     */
+    public function setQty($qty);
 }

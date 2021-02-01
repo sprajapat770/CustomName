@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <magento360>
+            <customname>
+                <enabled>1</enabled>
+            </customname>
+            <customname>
+                <price>
+                    <![CDATA[15$]]>
+                </price>
+                <qty>
+                    <![CDATA[50]]>
+                </qty>
+                <offer>
+                    <![CDATA[50]]>
+                </offer>       
+            </customname>
+        </magento360>
+    </default>
+</config>

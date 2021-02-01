@@ -5,7 +5,8 @@
             "customer_id": true,
             "product_id": true,
             "value": true,
-            "item_limit_remained": true
+            "item_limit_remained": true,
+            "qty": true
         },
         "constraint": {
             "PRIMARY": true,

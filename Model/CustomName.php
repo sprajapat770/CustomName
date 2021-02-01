@@ -90,4 +90,19 @@ class CustomName extends AbstractModel implements CustomNameInterface, IdentityI
     {
         return $this->setData('value', $value);
     }
+
+     /**
+     * @return mixed
+     */
+    public function getQty(){
+      return $this->setData('qty');  
+    }
+
+    /**
+     * @param $qty
+     * @return mixed
+     */
+    public function setQty($qty){
+        return $this->setData('qty', $qty);
+    }
 }
