@@ -3,16 +3,15 @@
 
 namespace Magento360\CustomeName\Plugin;
 
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento360\CustomeName\Api\CustomNameRepositoryInterface;
 use Magento360\CustomeName\Api\Data\CustomNameInterface;
 use Magento360\CustomeName\Model\CustomNameFactory;
 use Magento\Customer\Model\SessionFactory;
-use Magento\Customer\CustomerData\SectionSourceInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
-
 
 class OrderManagement
 {
@@ -36,7 +35,7 @@ class OrderManagement
         CustomNameFactory $customNameFactory,
         CustomNameRepositoryInterface $customNameRepository,
         SessionFactory $sessionFactory,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
         ScopeConfigInterface $scopeConfig
     ) {
         $this->scopeConfig = $scopeConfig;
@@ -66,47 +65,55 @@ class OrderManagement
     ): OrderInterface {
         $order = $proceed($order);
         $items = $order->getItems();
+        $count = 0;
         if (!empty($customer_id = $order->getCustomerId())) {
             foreach ($items as $item) {
                 $options = $item->getProductOptions();
                 if (isset($options['options']) && !empty($options['options'])) {
+
                     foreach ($options['options'] as $option) {
                         if ($option['label'] == "Purchaged Name") {
-                        $searchCriteria = $this->searchCriteriaBuilder->addFilter('customer_id',$customer_id,'eq')->create();
+                            $count++;
+                            if ($count ==1){
+                                $searchCriteria = $this->searchCriteriaBuilder->addFilter('customer_id', $customer_id, 'eq')->create();
+                                $collection = $this->customNameRepository->getList($searchCriteria);
+                            }
+                            $qty = 0;
+                            $dataValues = [];
+                            $dataProducts = [];
 
-                       $items = $this->customNameRepository->getList($searchCriteria);
+                            foreach ($collection->getItems() as $key => $val) {
+                                $dataValues[$val->getId()] = $val->getValue();
+                                $dataProducts[$val->getId()] = $val->getProductId();
+                            }
 
-                        $price = $this->scopeConfig->getValue('magento360/customname/price',ScopeInterface::SCOPE_STORE);
+                            $id = '';
+                            if((in_array($option['option_value'],$dataValues) )&& (in_array($productId,$dataProducts))){
+                                foreach ($dataValues as $key =>$value){
+                                    if ($option['option_value'] == $value && $dataProducts[$key]==$productId){
+                                        $id = $key;
+                                    }
+                                }
 
-                        $quantity = $this->scopeConfig->getValue('magento360/customname/qty',ScopeInterface::SCOPE_STORE);
-                        $offerquantity = $this->scopeConfig->getValue('magento360/customname/offer',ScopeInterface::SCOPE_STORE);
+                                $tb =  $this->customNameFactory->create()->load($id);
+                                    $tb->setQty((int)$val->getQty() + $item->getQtyOrdered());
+                                   try {
+                                       $tb->save();
+                                   }catch (\Exception $e){
 
-
-                        $qty = 0;
-                        
-                        foreach ($items->getItems() as $key => $val) {
-                                $qty += $val->getQty();
-
-                        if($option['option_value'] == $val->getValue()) && $item->getProductId() == $val->getProductId()){
-
-                           $tb =  $this->customNameFactory->create()-load($val->getId());
-
-                           $tb->setQty($val->getQty() + $item->getQty());
-                           $tb->save();
-                            
-                        }else{
-                            $this->customNameinterface->setCustomerId($customer_id);
-                            $this->customNameinterface->setProductId($item->getProductId());
-                            $this->customNameinterface->setValue($option['option_value']);
-                            $this->customNameinterface->getValue();
-                            $this->customNameRepository->save($this->customNameinterface);
-                        }
-                        }
+                                   }
+                                }else{
+                                    $this->customNameinterface->setCustomerId($customer_id);
+                                    $this->customNameinterface->setProductId($item->getProductId());
+                                    $this->customNameinterface->setValue($option['option_value']);
+                                    $this->customNameinterface->setQty($item->getQtyOrdered());
+                                    $this->customNameRepository->save($this->customNameinterface);
+                                }
+                            }
                         }
                     }
                 }
             }
-        }
         return $order;
     }
 }
