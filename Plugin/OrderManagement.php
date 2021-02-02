@@ -81,28 +81,32 @@ class OrderManagement
                             $qty = 0;
                             $dataValues = [];
                             $dataProducts = [];
+                            $dataQty = [];
 
                             foreach ($collection->getItems() as $key => $val) {
                                 $dataValues[$val->getId()] = $val->getValue();
                                 $dataProducts[$val->getId()] = $val->getProductId();
+                                $dataQty[$val->getId()] = $val->getProductId();
                             }
 
+                            $productId = $item->getProductId();
                             $id = '';
                             if((in_array($option['option_value'],$dataValues) )&& (in_array($productId,$dataProducts))){
-                                foreach ($dataValues as $key =>$value){
-                                    if ($option['option_value'] == $value && $dataProducts[$key]==$productId){
+                                
+                                foreach ($dataValues as $key =>$v){
+                                    if (($option['option_value'] == $v) && $dataProducts[$key]==$productId){
                                         $id = $key;
                                     }
                                 }
 
                                 $tb =  $this->customNameFactory->create()->load($id);
-                                    $tb->setQty((int)$val->getQty() + $item->getQtyOrdered());
+                                    $tb->setQty( ($dataQty[$id] + $item->getQtyOrdered()));
                                    try {
                                        $tb->save();
                                    }catch (\Exception $e){
 
                                    }
-                                }else{
+                            }else{
                                     $this->customNameinterface->setCustomerId($customer_id);
                                     $this->customNameinterface->setProductId($item->getProductId());
                                     $this->customNameinterface->setValue($option['option_value']);

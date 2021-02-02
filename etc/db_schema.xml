@@ -15,8 +15,9 @@
         <column xsi:type="int" name="product_id" unsigned="true" nullable="true"
                 identity="false" default="0" comment="Product ID"/>
         <column xsi:type="text" name="value" nullable="false" comment="Value"/>
-        <column xsi:type="int" name="qty" nullable="true" default="0" comment="qty purchaged" onCreate="migrateDataFrom(qty)"
+        <column xsi:type="int" name="qty" nullable="true" default="0" comment="Qty" onCreate="migrateDataFrom(qty)"
 />
+
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
