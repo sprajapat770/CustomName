@@ -15,7 +15,6 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 
 class CustomOptionPrice implements ObserverInterface
 {
-
     private $customNameRepository;
     /**
      * @var SessionFactory
@@ -26,9 +25,12 @@ class CustomOptionPrice implements ObserverInterface
 
     protected $scopeConfig;
 
-    public function __construct(SearchCriteriaBuilder $searchCriteriaBuilder,
+    public function __construct(
+        SearchCriteriaBuilder $searchCriteriaBuilder,
         ScopeConfigInterface $scopeConfig,
-        CustomNameRepositoryInterface $customNameRepository){
+        SessionFactory $sessionFactory,
+        CustomNameRepositoryInterface $customNameRepository
+    ){
 
 		$this->scopeConfig = $scopeConfig;
         $this->customNameRepository = $customNameRepository;
@@ -39,25 +41,57 @@ class CustomOptionPrice implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
 		if ($this->sessionFactory->create()->isLoggedIn()) {
-			
-			$customer_id = $this->sessionFactory->create()->getCustomer()->getId();
-	    	$searchCriteria = $this->searchCriteriaBuilder->addFilter('customer_id', $customer_id, 'eq')->create();
-	        $collection = $this->customNameRepository->getList($searchCriteria);
-	       	$qty = 0;
-            $dataValues = [];
-            $dataProducts = [];
-            $dataQty = [];
-
-            foreach ($collection->getItems() as $key => $val) {
-                $dataValues[$val->getId()] = $val->getValue();
-                $dataProducts[$val->getId()] = $val->getProductId();
-                $dataQty[$val->getId()] = $val->getQty();
+            $qty = 0;
+		    $iscustomname = false;
+		    /* @var $quote Mage_Sales_Model_Quote */
+            $quote = $observer->getQuote();
+            foreach ($quote->getAllItems() as $item) {
+                /* @var $item Mage_Sales_Model_Quote_Item */
+                $options = $item->getProduct()->getTypeInstance(true)->getOrderOptions($item->getProduct());
+                $price = 20;
+                $customOptions = (!empty($options['options']))?$options['options']:'' ;
+                if (!empty($customOptions)) {
+                    foreach ($customOptions as $option) {
+                        $optionTitle = $option['label'];
+                        if ($optionTitle == 'Purchaged Name'){
+                            $qty = $qty + $item->getQty();
+                            $iscustomname = true;
+                        }
+                    }
+                }
             }
-            $item = $observer->getEvent()->getData('quote_item');
-            $item = ( $item->getParentItem() ? $item->getParentItem() : $item );
-            $item->setCustomPrice($price);
-            $item->setOriginalCustomPrice($price);
-            $item->getProduct()->setIsSuperMode(true);
-    	}
+            if ($iscustomname){
+                if ($this->getPurchagedQuantity() > 50){
+                    if ($qty < 50){
+                        $adminfee = $quote->getAdminFee();
+                        if (!$adminfee) {
+                            return $this;
+                        }
+                        $order = $observer->getOrder();
+                        $order->setData('admin_fee', $adminfee);
+                        return $this;
+                    }else{
+                        $adminfee = $quote->getAdminFee();
+                        if (!$adminfee) {
+                            return $this;
+                        }
+                        $order = $observer->getOrder();
+                        $order->setData('admin_fee', $this->qty * .60);
+                        return $this;
+                    }
+                }
+            }
+		}
+    }
+
+    public function getPurchagedQuantity(){
+        $qty = 0;
+            $customer_id = $this->sessionFactory->create()->getCustomer()->getId();
+            $searchCriteria = $this->searchCriteriaBuilder->addFilter('customer_id', $customer_id, 'eq')->create();
+            $collection = $this->customNameRepository->getList($searchCriteria);
+            foreach ($collection->getItems() as $key => $val) {
+                $qty =$qty + $val->getQty();
+        }
+        return $qty;
     }
 }
