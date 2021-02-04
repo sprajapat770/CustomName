@@ -50,7 +50,7 @@ class Customer implements SectionSourceInterface
 
         foreach ($items->getItems() as $key => $val) {
             $values[] = $val->getValue();
-            $qty[] = $val->getQty();
+            $qty[] = (int) $val->getQty();
             $productIds[] = $val->getProductId();
         }
 

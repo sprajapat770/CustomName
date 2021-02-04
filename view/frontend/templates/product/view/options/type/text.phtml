@@ -35,7 +35,7 @@ $customerHelper = $this->helper('Magento360\CustomeName\Helper\Data');
                 ?>
                 <input data-bind="value:getLastItem()" type="text"
                        id="options_<?= $block->escapeHtmlAttr($_option->getId()) ?>_text"
-                       class="input-text product-custom-option"
+                       class="input-text product-custom-option custom-name"
                     <?php if (!empty($_textValidate)) {?>
                         data-validate="<?= $block->escapeHtml(json_encode($_textValidate)) ?>"
                     <?php } ?>

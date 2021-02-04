@@ -3,12 +3,13 @@
 namespace Magento360\CustomeName\Helper;
 
 use Magento\Customer\Model\SessionFactory;
-use Magento\Customer\Model\Session;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Registry;
 use Magento360\CustomeName\Api\CustomNameRepositoryInterface;
 use Magento360\CustomeName\Model\CustomNameFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Class Data
@@ -16,6 +17,12 @@ use Magento360\CustomeName\Model\CustomNameFactory;
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
+     /**
+     * @var ScopeConfigInterface
+     */
+    private $_scopeConfig;
+
+
     /**
      * @var SessionFactory
      */
@@ -44,18 +51,17 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         SessionFactory $sessionFactory,
         CustomNameFactory $customName,
         Registry $registry,
-        Session $session,
         CustomNameRepositoryInterface $list,
+        ScopeConfigInterface $scopeConfig,
         SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         parent::__construct($context);
         $this->sessionFactory = $sessionFactory;
-        $this->session = $session;
         $this->customName = $customName;
         $this->registry = $registry;
         $this->_list = $list;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-       // $this->custom = $custom;
+        $this->_scopeConfig = $scopeConfig;
     }
 
     /**
