@@ -33,7 +33,7 @@ $customerHelper = $this->helper('Magento360\CustomeName\Helper\Data');
                 }
                 $_textValidate['validate-no-utf8mb4-characters'] = true;
                 ?>
-                <input data-bind="value:getLastItems()" type="text"
+                <input data-bind="value:getLastItem()" type="text"
                        id="options_<?= $block->escapeHtmlAttr($_option->getId()) ?>_text"
                        class="input-text product-custom-option"
                     <?php if (!empty($_textValidate)) {?>
@@ -41,7 +41,7 @@ $customerHelper = $this->helper('Magento360\CustomeName\Helper\Data');
                     <?php } ?>
                        name="options[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                        data-selector="options[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
-                       value=""/>
+                      />
             <?php elseif ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_AREA) :?>
                 <?php $_textAreaValidate = null;
                 if ($_option->getIsRequire()) {
@@ -95,6 +95,11 @@ $customerHelper = $this->helper('Magento360\CustomeName\Helper\Data');
         }
     }
 </script>
+        <script>
+            window.adminfee = '<?php /* @escapeNotVerified */ echo $customerHelper->getAdminFee(); ?>'
+            window.adminqty = '<?php /* @escapeNotVerified */ echo $customerHelper->getAdminQty(); ?>'
+            window.adminofferqty = '<?php /* @escapeNotVerified */ echo $customerHelper->getAdminOfferQty(); ?>'
+        </script>
     </div>
 
 <?php elseif($_option->getTitle() != "Purchaged Name"):?>

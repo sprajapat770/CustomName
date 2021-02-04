@@ -98,6 +98,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 ////        return '';
 //    }
 
+    public function getAdminFee(){
+        return $this->_scopeConfig->getValue('magento360/customname/price');
+    }
+    public function getAdminQty(){
+        return $this->_scopeConfig->getValue('magento360/customname/qty');
+    }
+    public function getAdminOfferQty(){
+        return $this->_scopeConfig->getValue('magento360/customname/offer');
+    }
 
     public function getCurrentProduct()
     {

@@ -4,13 +4,17 @@ define(['uiElement','underscore','Magento_Customer/js/customer-data'],function(C
 	const customName = customerData.get('custom_name');
 	return Component.extend({
 
+        initialize: function () {
+            this._super();
+           // this.customename = customerData.get('custom_name').values.slice(-1)[0];
+        },
+
 		getItems: function(){
 			return customName().values;
 		},
 
-        getLastItems: function(){
-            return customName().values.slice(-1)[0];
-        }
-
+        getLastItem: function(){
+            return customerData.get('custom_name')().values.slice(-1)[0];
+        },
 	});
 });

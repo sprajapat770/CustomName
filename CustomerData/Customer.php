@@ -39,7 +39,9 @@ class Customer implements SectionSourceInterface
             return [];
         }
 
-        $value = [];
+        $values = [];
+        $qty = [];
+        $productIds = [];
         $customerId = $this->currentCustomer->getCustomerId();
 
         $searchCriteria = $this->searchCriteriaBuilder->addFilter('customer_id',$customerId,'eq')->create();
@@ -47,9 +49,14 @@ class Customer implements SectionSourceInterface
         $items = $this->_list->getList($searchCriteria);
 
         foreach ($items->getItems() as $key => $val) {
-            $value[] = $val->getValue();
+            $values[] = $val->getValue();
+            $qty[] = $val->getQty();
+            $productIds[] = $val->getProductId();
         }
 
-        return ["values"=>$value];
+        return [
+            "values"=>$values,
+            "qty"=>$qty,
+            "productIds" => $productIds];
     }
 }

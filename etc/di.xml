@@ -6,4 +6,22 @@
     </type>
     <preference for="Magento360\CustomeName\Api\CustomNameRepositoryInterface" type="Magento360\CustomeName\Model\CustomNameRepository" />
     <preference for="Magento360\CustomeName\Api\Data\CustomNameInterface" type="Magento360\CustomeName\Model\CustomName" />
+    <type name="Magento\Framework\Pricing\Adjustment\Collection">
+        <arguments>
+            <argument name="adjustments" xsi:type="array">
+                <item name="adminfee" xsi:type="const">Magento360\CustomeName\Pricing\Adjustment::ADJUSTMENT_CODE</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Pricing\Adjustment\Pool">
+        <arguments>
+            <argument name="adjustments" xsi:type="array">
+                <item name="adminfee" xsi:type="array">
+                    <item name="className" xsi:type="string">Magento360\CustomeName\Pricing\Adjustment</item>
+                    <item name="sortOrder" xsi:type="string">10</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
 </config>
