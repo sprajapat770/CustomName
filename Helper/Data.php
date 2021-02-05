@@ -10,13 +10,13 @@ use Magento360\CustomeName\Api\CustomNameRepositoryInterface;
 use Magento360\CustomeName\Model\CustomNameFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
-
 /**
  * Class Data
  * Magento360\CustomeName\Helper
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
+    const CONFIG_CUSTOM_IS_ENABLED = 'magento360/customname/enabled';
      /**
      * @var ScopeConfigInterface
      */
@@ -71,6 +71,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->sessionFactory->create()->getCustomer();
     }
+    public function getSession()
+    {
+        return $this->sessionFactory->create();
+    }
 
 //    public function getSingleCustomNameValue(){
 //
@@ -103,15 +107,18 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 ////        }
 ////        return '';
 //    }
-
+    public function isModuleEnabled()
+    {
+        return $this->_scopeConfig->getValue(self::CONFIG_CUSTOM_IS_ENABLED, ScopeInterface::SCOPE_STORE);
+    }
     public function getAdminFee(){
-        return $this->_scopeConfig->getValue('magento360/customname/price');
+        return (float) $this->_scopeConfig->getValue('magento360/customname/price',ScopeInterface::SCOPE_STORE);
     }
     public function getAdminQty(){
-        return $this->_scopeConfig->getValue('magento360/customname/qty');
+        return (float) $this->_scopeConfig->getValue('magento360/customname/qty',ScopeInterface::SCOPE_STORE);
     }
     public function getAdminOfferQty(){
-        return $this->_scopeConfig->getValue('magento360/customname/offer');
+        return (float) $this->_scopeConfig->getValue('magento360/customname/offer',ScopeInterface::SCOPE_STORE);
     }
 
     public function getCurrentProduct()

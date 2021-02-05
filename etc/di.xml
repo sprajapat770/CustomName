@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Sales\Api\OrderManagementInterface">
+    <!--<type name="Magento\Sales\Api\OrderManagementInterface">
         <plugin name="before_place_order_operation"
                 type="Magento360\CustomeName\Plugin\OrderManagement" />
-    </type>
+    </type>-->
     <preference for="Magento360\CustomeName\Api\CustomNameRepositoryInterface" type="Magento360\CustomeName\Model\CustomNameRepository" />
     <preference for="Magento360\CustomeName\Api\Data\CustomNameInterface" type="Magento360\CustomeName\Model\CustomName" />
     <type name="Magento\Framework\Pricing\Adjustment\Collection">

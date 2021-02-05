@@ -24,14 +24,16 @@ class AdminFee extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     protected $searchCriteriaBuilder;
 
     protected $scopeConfig;
+    protected $dataHelper;
 
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
         ScopeConfigInterface $scopeConfig,
         SessionFactory $sessionFactory,
-        CustomNameRepositoryInterface $customNameRepository
+        CustomNameRepositoryInterface $customNameRepository,
+        \Magento360\CustomeName\Helper\Data $dataHelper
     ){
-
+        $this->dataHelper = $dataHelper;
         $this->scopeConfig = $scopeConfig;
         $this->customNameRepository = $customNameRepository;
         $this->sessionFactory = $sessionFactory;
@@ -60,8 +62,11 @@ class AdminFee extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         }
 
         $amount = 0;
-        foreach($quote->getItemsCollection() as $_quoteItem){
+       /* foreach($quote->getItemsCollection() as $_quoteItem){
             $amount += $_quoteItem->getQty() * \Magento360\CustomeName\Pricing\Adjustment::ADJUSTMENT_VALUE;
+        }*/
+        if ($this->sessionFactory->create()->isLoggedIn()) {
+            $amount = $this->addAdminFee($quote,$amount);
         }
 
         $total->setTotalAmount(self::COLLECTOR_TYPE_CODE, $amount);
@@ -102,34 +107,8 @@ class AdminFee extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
             $amount += $_quoteItem->getQty() * \Magento360\CustomeName\Pricing\Adjustment::ADJUSTMENT_VALUE;
         }*/
 
-        $qty = 0;
-        $iscustomname = false;
-
         if ($this->sessionFactory->create()->isLoggedIn()) {
-            foreach ($quote->getItemsCollection() as $item) {
-                /* @var $item Mage_Sales_Model_Quote_Item */
-                $options = $item->getProduct()->getTypeInstance(true)->getOrderOptions($item->getProduct());
-                $customOptions = (!empty($options['options'])) ? $options['options'] : '';
-                if (!empty($customOptions)) {
-                    foreach ($customOptions as $option) {
-                        $optionTitle = $option['label'];
-                        if ($optionTitle == 'Purchaged Name') {
-                            $qty = $qty + $item->getQty();
-                            $iscustomname = true;
-                        }
-                    }
-                }
-            }
-
-            if ($iscustomname) {
-                if ($this->getPurchagedQuantity() > 50) {
-                    if ($qty < 50) {
-                        $amount = 1 * \Magento360\CustomeName\Pricing\Adjustment::ADJUSTMENT_VALUE;
-                    } else {
-                        $amount += $qty * 0.60;
-                    }
-                }
-            }
+            $amount = $this->addAdminFee($quote,$amount);
         }
         return [
             'code' => $this->getCode(),
@@ -144,6 +123,39 @@ class AdminFee extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     public function getLabel()
     {
         return __('Custom Name Fee');
+    }
+
+    public function addAdminFee($quote,$amount = 0){
+        $iscustomname = false;
+        $qty = 0;
+        foreach ($quote->getItemsCollection() as $item) {
+            /* @var $item Mage_Sales_Model_Quote_Item */
+            $options = $item->getProduct()->getTypeInstance(true)->getOrderOptions($item->getProduct());
+            $customOptions = (!empty($options['options'])) ? $options['options'] : '';
+            if (!empty($customOptions)) {
+                foreach ($customOptions as $option) {
+                    $optionTitle = $option['label'];
+                    if ($optionTitle == 'Purchaged Name') {
+                        $qty = $qty + $item->getQty();
+                        $iscustomname = true;
+                    }
+                }
+            }
+        }
+
+        if ($iscustomname) {
+
+            if ($this->getPurchagedQuantity() > $this->dataHelper->getAdminOfferQty()) {
+                if ($qty < $this->dataHelper->getAdminQty()) {
+                    $amount = 1 * $this->dataHelper->getAdminFee();
+                } else {
+                    $amount += $qty * 0.60;
+                }
+            }else{
+                $amount = 0;
+            }
+        }
+        return $amount;
     }
 
     public function getPurchagedQuantity(){

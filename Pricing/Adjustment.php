@@ -9,6 +9,12 @@ class Adjustment implements AdjustmentInterface
 {
     const ADJUSTMENT_CODE = 'adminfee';
     const ADJUSTMENT_VALUE = 15;
+    protected $helper;
+    public function __construct(
+        \Magento360\CustomeName\Helper\Data $dataHelper
+    ) {
+        $this->helper  = $dataHelper;
+    }
 
     /**
      * Get adjustment code
@@ -50,7 +56,7 @@ class Adjustment implements AdjustmentInterface
      */
     public function extractAdjustment($amount, SaleableInterface $saleableItem, $context = [])
     {
-        return $amount - self::ADJUSTMENT_VALUE;
+        return $amount - $this->helper->getAdminFee();
     }
 
     /**
@@ -63,7 +69,7 @@ class Adjustment implements AdjustmentInterface
      */
     public function applyAdjustment($amount, SaleableInterface $saleableItem, $context = [])
     {
-        return $amount + self::ADJUSTMENT_VALUE;
+        return $amount + $this->helper->getAdminFee();
     }
 
     /**

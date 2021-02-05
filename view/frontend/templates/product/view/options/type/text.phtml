@@ -95,11 +95,6 @@ $customerHelper = $this->helper('Magento360\CustomeName\Helper\Data');
         }
     }
 </script>
-        <script>
-            window.adminfee = '<?php /* @escapeNotVerified */ echo $customerHelper->getAdminFee(); ?>'
-            window.adminqty = '<?php /* @escapeNotVerified */ echo $customerHelper->getAdminQty(); ?>'
-            window.adminofferqty = '<?php /* @escapeNotVerified */ echo $customerHelper->getAdminOfferQty(); ?>'
-        </script>
     </div>
 
 <?php elseif($_option->getTitle() != "Purchaged Name"):?>
