@@ -10,11 +10,18 @@ define(['uiElement','underscore','Magento_Customer/js/customer-data'],function(C
         },
 
 		getItems: function(){
-			return customName().values;
+			if(_.isEmpty(customName())){
+				return {};
+			}
+			return customName();
 		},
 
         getLastItem: function(){
-            return customerData.get('custom_name')().values.slice(-1)[0];
+            if(_.isEmpty(customName())){
+				return '';
+			}else{
+            return customName().values.slice(-1)[0];
+			}
         },
 	});
 });

@@ -12,7 +12,7 @@ $customerHelper = $this->helper('Magento360\CustomeName\Helper\Data');
 /*var_dump($customerHelper->getCustomer()->getIsCustomNameActive());*/
 ?>
 
-<?php if (( $_option->getTitle() == "Purchaged Name" && !empty($customerHelper->getCustomer()->getIsCustomNameActive()) == 1 )):
+<?php if (( $_option->getTitle() == "Purchaged Name" && !empty($customerHelper->getCustomer()->getIsCustomNameActive()) == 1  && $customerHelper->isModuleEnabled())):
     ?>
     <div class="field<?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_AREA) {
         echo ' textarea';

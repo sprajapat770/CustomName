@@ -19,12 +19,16 @@ class Customer implements SectionSourceInterface
 
     protected $_list;
 
+    protected $productFactory;
+
     public function __construct(
         CurrentCustomer $currentCustomer,
         \Magento360\CustomeName\Api\CustomNameRepositoryInterface $list,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
+        \Magento\Catalog\Model\ProductFactory $productFactory
     ) {
 
+        $this->productFactory = $productFactory; 
         $this->_list = $list;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->currentCustomer = $currentCustomer;
@@ -41,7 +45,7 @@ class Customer implements SectionSourceInterface
 
         $values = [];
         $qty = [];
-        $productIds = [];
+        $productNames = [];
         $customerId = $this->currentCustomer->getCustomerId();
 
         $searchCriteria = $this->searchCriteriaBuilder->addFilter('customer_id',$customerId,'eq')->create();
@@ -51,12 +55,12 @@ class Customer implements SectionSourceInterface
         foreach ($items->getItems() as $key => $val) {
             $values[] = $val->getValue();
             $qty[] = (int) $val->getQty();
-            $productIds[] = $val->getProductId();
+            $productNames[] = $this->productFactory->create()->load($val->getProductId())->getName();
         }
 
         return [
             "values"=>$values,
             "qty"=>$qty,
-            "productIds" => $productIds];
+            "productNames" => $productNames];
     }
 }

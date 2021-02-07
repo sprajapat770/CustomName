@@ -10,7 +10,7 @@
     <type name="Magento\Checkout\Model\CompositeConfigProvider">
         <arguments>
             <argument name="configProviders" xsi:type="array">
-                <item name="checkout_Extrafee_block" xsi:type="object">Magento360\CustomeName\Model\CustomConfigProvider</item>
+                <item name="checkout_Adminfee_block" xsi:type="object">Magento360\CustomeName\Model\CustomConfigProvider</item>
             </argument>
         </arguments>
     </type>

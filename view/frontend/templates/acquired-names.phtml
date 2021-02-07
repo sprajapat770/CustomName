@@ -1,8 +1,8 @@
 <div data-bind="scope:'suraj-component'">
     <h2 data-bind="text:title"></h2>
     <ul>
-        <!--ko foreach: {data:getItems(), as: 'page' } -->
-        <li><a data-bind="text: page "></a></li>
+        <!--ko foreach: {data:getItems(), as: 'item' } -->
+        <li><a data-bind="text: item.values "></a><a data-bind="text: item.qty "></a><a data-bind="text: item.productNames "></a></li>
         <!--/ko-->
     </ul>
 </div>

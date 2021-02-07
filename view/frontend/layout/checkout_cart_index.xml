@@ -10,6 +10,7 @@
                                 <item name="custom-admin-fee" xsi:type="array">
                                     <item name="component" xsi:type="string">Magento360_CustomeName/js/view/cart/totals/adminfee</item>
                                     <item name="config" xsi:type="array">
+                                        <!-- <item name="template" xsi:type="string">Magento360_CustomeName/cart/total/admin-fee</item> -->
                                         <item name="title" xsi:type="string" translate="true">Custom Name Fee</item>
                                     </item>
                                 </item>

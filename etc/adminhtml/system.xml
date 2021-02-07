@@ -12,8 +12,7 @@
                 <label>Custome Name Features</label>
                 <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Enable Custom Name Feature</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <backend_model>Magento\Contact\Model\System\Config\Backend\Links</backend_model>
+                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
                 </field>
                 <field id="price" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Minimum Price</label>
@@ -32,6 +31,24 @@
                     <depends>
                         <field id="*/customname/enabled">1</field>
                     </depends>
+                </field>
+            </group>
+            <group id="tax" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Admin Fee Tax</label>
+                <depends><field id="*/customname/enable">1</field></depends>
+                <field id="enable" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Calculate Tax On Admin Fee</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tax_class" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tax Class</label>
+                    <source_model>Magento\Tax\Model\TaxClass\Source\Product</source_model>
+                    <depends><field id="*/*/enable">1</field></depends>
+                </field>
+                <field id="display" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Admin Fee</label>
+                    <source_model>Magento\Tax\Model\System\Config\Source\Tax\Display\Type</source_model>
+                    <depends><field id="*/*/enable">1</field></depends>
                 </field>
             </group>
         </section>

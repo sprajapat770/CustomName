@@ -86,7 +86,7 @@ class OrderManagement
                             foreach ($collection->getItems() as $key => $val) {
                                 $dataValues[$val->getId()] = $val->getValue();
                                 $dataProducts[$val->getId()] = $val->getProductId();
-                                $dataQty[$val->getId()] = $val->getProductId();
+                                $dataQty[$val->getId()] = $val->getQty();
                             }
 
                             $productId = $item->getProductId();
